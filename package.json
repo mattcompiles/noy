@@ -1,0 +1,15 @@
+{
+  "name": "noy",
+  "version": "0.0.1",
+  "description": "",
+  "bin": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "execa": "^1.0.0",
+    "find-root": "^1.1.0"
+  }
+}
