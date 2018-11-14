@@ -1,15 +1,20 @@
 {
   "name": "noy",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "bin": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "execa": "^1.0.0",
-    "find-root": "^1.1.0"
+    "find-root": "^1.1.0",
+    "lodash.isequal": "^4.5.0",
+    "lodash.partition": "^4.6.0"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
   }
 }

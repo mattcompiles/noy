@@ -5,6 +5,8 @@ const { promisify } = require('util');
 const execa = require('execa');
 const findRoot = require('find-root');
 
+const handleArgs = require('./handleArgs');
+
 const readFile = promisify(fs.readFile);
 const fileExists = file =>
   new Promise(resolve => {
@@ -31,29 +33,27 @@ const isYarnProject = async packageRoot => {
 };
 
 (async () => {
-  const haveYarn = await isInstalled('yarn');
-  const haveNpm = await isInstalled('npm');
-
-  const packageRoot = findRoot(process.cwd());
-  const useYarn = await isYarnProject(packageRoot);
-
-  if (useYarn && !haveYarn) {
-    console.log('Yarn project detected but yarn is not installed');
-    process.exit(1);
-  } else if (!useYarn && !haveNpm) {
-    console.log('NPM project detected but NPM is not installed');
-    process.exit(1);
-  }
-
-  const [, , ...forwardArgs] = process.argv;
-
   try {
-    if (useYarn) {
-      await execa('yarn', forwardArgs).stdout.pipe(process.stdout);
-    } else {
-      await execa('npm', forwardArgs).stdout.pipe(process.stdout);
+    const haveYarn = await isInstalled('yarn');
+    const haveNpm = await isInstalled('npm');
+
+    const packageRoot = findRoot(process.cwd());
+    const useYarn = await isYarnProject(packageRoot);
+
+    if (useYarn && !haveYarn) {
+      console.log('Yarn project detected but yarn is not installed');
+      process.exit(1);
+    } else if (!useYarn && !haveNpm) {
+      console.log('NPM project detected but NPM is not installed');
+      process.exit(1);
     }
+
+    const [, , ...forwardArgs] = process.argv;
+
+    execa(...handleArgs(useYarn, forwardArgs), { stdio: 'inherit' });
   } catch (e) {
+    console.log(e);
+
     process.exit(1);
   }
 })();
